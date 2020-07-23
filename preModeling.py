@@ -24,11 +24,11 @@ class preModeling():
         if st.checkbox('Solve for Null values'):
             if st.checkbox('Remove Columns if Null greater than threshold(%)'):
                 threshold = st.text_input('Enter threshold Value in percentage(%)')
-                if 'remove_columns_threshold' in pipeline_dict.keys():
-                    pipeline_dict['remove_columns_threshold'].append(threshold)
-                else:
-                    pipeline_dict['remove_columns_threshold'] = threshold
                 if st.button('Remove'):
+                    if 'remove_columns_threshold' in pipeline_dict.keys():
+                        pipeline_dict['remove_columns_threshold'].append(threshold)
+                    else:
+                        pipeline_dict['remove_columns_threshold'] = [threshold]
                     remove_columns = self.remove_null_columns(dataFrame, float(threshold))
                     dataFrame.drop(remove_columns,axis=1,inplace=True)
                     st.write('List of droped columns')
@@ -36,12 +36,12 @@ class preModeling():
 
             if st.checkbox('Fill Null value with median and mode'):
                 columns = st.multiselect('Select Columns',dataFrame.columns)
-                if 'Fill_Median_Mode_Columns' in pipeline_dict.keys():
-                    for c in columns:
-                        pipeline_dict['Fill_Median_Mode_Columns'].append(c)
-                else:
-                    pipeline_dict['Fill_Median_Mode_Columns'] = columns
                 if st.button('Fill'):
+                    if 'Fill_Median_Mode_Columns' in pipeline_dict.keys():
+                        for c in columns:
+                            pipeline_dict['Fill_Median_Mode_Columns'].append(c)
+                    else:
+                        pipeline_dict['Fill_Median_Mode_Columns'] = columns
                     dataFrame = self.replace_null_columns(dataFrame,columns)
                     st.write('Done')
 
@@ -66,13 +66,13 @@ class preModeling():
         if st.checkbox('Convert continous data into classes by bins'):
             column = st.selectbox('Select Column',self.get_numeric_data_columns(dataFrame))
             bins = st.text_input('Enter Number of bins')
-            if 'Create_Bins' in pipeline_dict.keys():
-                pipeline_dict['Create_Bins']['column_Name'].append(column)
-                pipeline_dict['Create_Bins']['Numbers_bin'].append(column)
-            else :
-                pipeline_dict['Create_Bins'] = {'column_Name':[column],'Numbers_bin':[bins]}
 
             if st.button('Convert'):
+                if 'Create_Bins' in pipeline_dict.keys():
+                    pipeline_dict['Create_Bins']['column_Name'].append(column)
+                    pipeline_dict['Create_Bins']['Numbers_bin'].append(column)
+                else :
+                    pipeline_dict['Create_Bins'] = {'column_Name':[column],'Numbers_bin':[bins]}
                 dataFrame[column] = self.do_bining(dataFrame,column,int(bins))
                 st.write('Done!')
 
@@ -86,12 +86,13 @@ class preModeling():
         if st.checkbox('Encoding'):
             if st.checkbox('One-hot Encoding'):
                 list_columns = st.multiselect('Columns for Encoding',dataFrame.columns)
-                if 'OneHotEncoding' in pipeline_dict.keys():
-                    for c in list_columns:
-                        pipeline_dict['OneHotEncoding'].append(c)
-                else:
-                    pipeline_dict['OneHotEncoding'] = list_columns
+
                 if st.button('Click OneHot'):
+                    if 'OneHotEncoding' in pipeline_dict.keys():
+                        for c in list_columns:
+                            pipeline_dict['OneHotEncoding'].append(c)
+                    else:
+                        pipeline_dict['OneHotEncoding'] = list_columns
                     for col in list_columns:
                         tempdf = pd.get_dummies(data = dataFrame[col])
                         for in_col in tempdf.columns:
@@ -102,25 +103,26 @@ class preModeling():
 
             if st.checkbox('Label Encoding'):
                 label_encoding_columns = st.multiselect('Columns for Encoding',dataFrame.columns)
-                if 'LabelEncoding' in pipeline_dict.keys():
-                    for c in label_encoding_columns:
-                        pipeline_dict['LabelEncoding'].append(c)
-                else:
-                    pipeline_dict['LabelEncoding'] = label_encoding_columns
+
                 if st.button('Label Encoding'):
+                    if 'LabelEncoding' in pipeline_dict.keys():
+                        for c in label_encoding_columns:
+                            pipeline_dict['LabelEncoding'].append(c)
+                    else:
+                        pipeline_dict['LabelEncoding'] = label_encoding_columns
                     dataFrame = self.do_label_Encoding(dataFrame,label_encoding_columns)
                     st.write('Done!')
 
 
             if st.checkbox('Binary encoding'):
                 binary_encoding_columns = st.multiselect('Columns for Encoding',dataFrame.columns)
-                if 'BinaryEncoding' in pipeline_dict.keys():
-                    for c in binary_encoding_columns:
-                        pipeline_dict['BinaryEncoding'].append(c)
-                else:
-                    pipeline_dict['BinaryEncoding'] = binary_encoding_columns
 
                 if st.button('Binary Encoding'):
+                    if 'BinaryEncoding' in pipeline_dict.keys():
+                        for c in binary_encoding_columns:
+                            pipeline_dict['BinaryEncoding'].append(c)
+                    else:
+                        pipeline_dict['BinaryEncoding'] = binary_encoding_columns
                     for col in binary_encoding_columns:
                         encoder = ce.BinaryEncoder(cols=[col])
                         dfbin = encoder.fit_transform(dataFrame[col])

@@ -32,25 +32,25 @@ class EDA():
             datatype = st.multiselect('Select datatype You want respectively: ',['object','int64','float64',
                                     'datetime64','bool'])
 
-            if 'Convert_Data_Type' in pipeline_dict.keys():
-                pipeline_dict['Convert_Data_Type']['column_name'].append(data_options)
-                pipeline_dict['Convert_Data_Type']['data_type'].append(datatype)
-            else:
-                pipeline_dict['Convert_Data_Type'] = {'column_name':data_options,'data_type':datatype}
-
             if st.button('Change'):
+                if 'Convert_Data_Type' in pipeline_dict.keys():
+                    pipeline_dict['Convert_Data_Type']['column_name'].append(data_options)
+                    pipeline_dict['Convert_Data_Type']['data_type'].append(datatype)
+                else:
+                    pipeline_dict['Convert_Data_Type'] = {'column_name':data_options,'data_type':datatype}
                 print(data_options)
                 self.convert_type(dataFrame,data_options,datatype)
                 st.write('Done!')
 
         if st.checkbox('Remove columns'):
             options = st.multiselect('Select Columns You want to remove: ',dataFrame.columns)
-            if 'remove_columns' in pipeline_dict.keys():
-                for o in options:
-                    pipeline_dict['remove_columns'].append(o)
-            else:
-                pipeline_dict['remove_columns'] = options
+
             if st.button('Drop') :
+                if 'remove_columns' in pipeline_dict.keys():
+                    for o in options:
+                        pipeline_dict['remove_columns'].append(o)
+                else:
+                    pipeline_dict['remove_columns'] = options
                 dataFrame.drop(options,axis=1,inplace=True)
                 st.write('Droped columns are')
                 st.write(options)
