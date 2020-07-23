@@ -4,7 +4,7 @@ import EDA as eda
 import preModeling as PM
 import modeling
 dataFrame = None
-pipeline_dict = {}
+pipeline_dict = None
 st.title('Data Science')
 
 url = st.text_input("Enter Data Url(Must be csv file)")
@@ -12,6 +12,7 @@ url = st.text_input("Enter Data Url(Must be csv file)")
 if url:
     gd = gd.get_Data()
     dataFrame = gd.get_data_csv(url)
+    pipeline_dict = gd.get_pipline_dict()
     eda = eda.EDA()
     pm = PM.preModeling()
     m = modeling.Modeling()

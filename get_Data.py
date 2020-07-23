@@ -9,3 +9,7 @@ class get_Data():
     def get_data_csv(self,url):
         #print(url)
         return pd.read_csv(filepath_or_buffer = url)
+
+    @st.cache(allow_output_mutation=True)
+    def get_pipline_dict(self):
+        return {}
